@@ -21,11 +21,11 @@ class QueryPage(Widget):
         self._get_element(QueryPage._code_field)
         self.driver.execute_script(f'window.editor.doc.setValue("{query}")')
 
-    def get_header_text(self):
-        return self._get_element(self._table_header).text
+    def get_header_text(self, text):
+        return self._get_element_with_text(self._table_header, text)
 
-    def get_operation_result_text(self):
-        return self._get_element(self._operation_result_header).text
+    def get_operation_result_text(self, text):
+        return self._get_element_with_text(self._operation_result_header, text)
 
     def get_table_content(self):
         table = self._get_element(self._table_content)

@@ -17,3 +17,7 @@ class Widget:
     def _get_elements(self, locator: tuple, timeout=10) -> list[WebElement]:
         return WebDriverWait(self.driver, timeout).until(
             expected.visibility_of_any_elements_located(locator))
+
+    def _get_element_with_text(self, locator: tuple, text, timeout=10) -> WebElement:
+        return WebDriverWait(self.driver, timeout).until(
+            expected.text_to_be_present_in_element(locator, text))
