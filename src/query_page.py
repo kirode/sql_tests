@@ -3,7 +3,7 @@ from src.widget import Widget
 
 
 class QueryPage(Widget):
-    _url = 'https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all'
+    _url = Widget._url + '/sql/trysql.asp?filename=trysql_select_all'
     _run_sql_button = (By.CLASS_NAME, 'ws-btn')
     _code_field = (By.CLASS_NAME, 'CodeMirror-lines')
     _table_header = (By.CSS_SELECTOR, '#divResultSQL div div')

@@ -5,7 +5,7 @@ from selenium.webdriver.remote.webdriver import WebElement
 
 
 class Widget:
-    _url = 'https://www.w3schools.com/'
+    _url = 'https://www.w3schools.com'
 
     def __init__(self, driver: WebDriver) -> None:
         self.driver = driver
