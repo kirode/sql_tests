@@ -1,7 +1,5 @@
-import time
-
 from src.query_page import QueryPage
-from selenium.webdriver.common.by import By
+from pytest_check import is_true
 
 
 def test_customer_address(driver):
@@ -38,14 +36,14 @@ def test_create_customer(driver):
     page = QueryPage(driver).open()
     page.set_sql_statement(query)
     page.run_sql()
-    assert page.get_operation_result_text(result)
+    is_true(page.get_operation_result_text(result))
 
     page.set_sql_statement(f'SELECT * FROM Customers WHERE CustomerName=\'{customer["CustomerName"]}\'')
     page.run_sql()
     created_customer = page.find_row_by_value(customer['CustomerName'])
     result_customer = page.row_to_dict(created_customer)
     del result_customer['CustomerID']
-    assert result_customer == customer
+    is_true(result_customer == customer)
 
 
 def test_update_customer(driver):
@@ -64,13 +62,13 @@ def test_update_customer(driver):
     values = values[:index] + ' '
     page.set_sql_statement(f'UPDATE Customers SET {values}WHERE CustomerID=\'1\'')
     page.run_sql()
-    assert page.get_operation_result_text(result)
+    is_true(page.get_operation_result_text(result))
 
     page.set_sql_statement('SELECT * FROM Customers WHERE CustomerID=\'1\'')
     page.run_sql()
     updated_customer = page.row_to_dict(page.find_row_by_value('1'))
     del updated_customer['CustomerID']
-    assert updated_customer == customer
+    is_true(updated_customer == customer)
 
 
 def test_delete_customer(driver):
@@ -79,9 +77,9 @@ def test_delete_customer(driver):
     page = QueryPage(driver).open()
     page.set_sql_statement('DELETE FROM Customers WHERE CustomerID=\'1\'')
     page.run_sql()
-    assert page.get_operation_result_text(delete_result)
+    is_true(page.get_operation_result_text(delete_result))
 
     page.set_sql_statement('SELECT * FROM Customers WHERE CustomerID=\'1\'')
     page.run_sql()
-    assert page.get_operation_result_text(select_result)
+    is_true(page.get_operation_result_text(select_result))
 
