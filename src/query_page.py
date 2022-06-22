@@ -7,6 +7,7 @@ class QueryPage(Widget):
     _run_sql_button = (By.CLASS_NAME, 'ws-btn')
     _code_field = (By.CLASS_NAME, 'CodeMirror-lines')
     _table_header = (By.CSS_SELECTOR, '#divResultSQL div div')
+    _operation_result_header = (By.CSS_SELECTOR, '#divResultSQL div')
     _table_content = (By.CSS_SELECTOR, '#divResultSQL div table tbody')
 
     def open(self):
@@ -22,6 +23,9 @@ class QueryPage(Widget):
 
     def get_header_text(self):
         return self._get_element(self._table_header).text
+
+    def get_operation_result_text(self):
+        return self._get_element(self._operation_result_header).text
 
     def get_table_content(self):
         table = self._get_element(self._table_content)
