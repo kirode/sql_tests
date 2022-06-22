@@ -3,11 +3,16 @@ from src.widget import Widget
 
 
 class QueryPage(Widget):
-    _url = 'https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all'
+    _url = Widget._url + '/sql/trysql.asp?filename=trysql_select_all'
     _run_sql_button = (By.CLASS_NAME, 'ws-btn')
     _code_field = (By.CLASS_NAME, 'CodeMirror-lines')
     _table_header = (By.CSS_SELECTOR, '#divResultSQL div div')
+    _operation_result_header = (By.CSS_SELECTOR, '#divResultSQL div')
     _table_content = (By.CSS_SELECTOR, '#divResultSQL div table tbody')
+
+    def _get_table_content(self):
+        table = self._get_element(self._table_content)
+        return [row for row in table.find_elements(By.CSS_SELECTOR, 'tr')]
 
     def open(self):
         self.driver.get(self._url)
@@ -20,18 +25,17 @@ class QueryPage(Widget):
         self._get_element(QueryPage._code_field)
         self.driver.execute_script(f'window.editor.doc.setValue("{query}")')
 
-    def get_header_text(self):
-        return self._get_element(self._table_header).text
+    def get_header_text(self, text):
+        return self._get_element_with_text(self._table_header, text)
 
-    def get_table_content(self):
-        table = self._get_element(self._table_content)
-        return [row for row in table.find_elements(By.CSS_SELECTOR, 'tr')]
+    def get_operation_result_text(self, text):
+        return self._get_element_with_text(self._operation_result_header, text)
 
     def get_table_headers(self):
-        return [elem.text for elem in self.get_table_content()[0].find_elements(By.CSS_SELECTOR, 'th')]
+        return [elem.text for elem in self._get_table_content()[0].find_elements(By.CSS_SELECTOR, 'th')]
 
     def get_table_rows(self):
-        return self.get_table_content()[1:]
+        return self._get_table_content()[1:]
 
     def get_table_data(self):
         table_data = []
