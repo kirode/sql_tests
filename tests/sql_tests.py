@@ -73,4 +73,15 @@ def test_update_customer(driver):
     assert updated_customer == customer
 
 
+def test_delete_customer(driver):
+    delete_result = 'You have made changes to the database. Rows affected: 1'
+    select_result = 'No result.'
+    page = QueryPage(driver).open()
+    page.set_sql_statement('DELETE FROM Customers WHERE CustomerID=\'1\'')
+    page.run_sql()
+    assert page.get_operation_result_text(delete_result)
+
+    page.set_sql_statement('SELECT * FROM Customers WHERE CustomerID=\'1\'')
+    page.run_sql()
+    assert page.get_operation_result_text(select_result)
 
