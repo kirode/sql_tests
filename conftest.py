@@ -1,6 +1,8 @@
 from pytest import fixture
 from selenium import webdriver
 from selenium.webdriver import ChromeOptions, FirefoxOptions
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -37,13 +39,15 @@ def create_local_driver(config):
     driver = None
     if config["browser"] == "chrome":
         driver_manager = ChromeDriverManager()
+        service = ChromeService
         options = get_chrome_options(config)
-        driver = webdriver.Chrome(executable_path=driver_manager.install(), options=options)
+        driver = webdriver.Chrome(service=service(driver_manager.install()), options=options)
 
-    elif config ["browser"] == "firefox":
+    elif config["browser"] == "firefox":
         driver_manager = GeckoDriverManager()
+        service = FirefoxService
         options = get_firefox_options(config)
-        driver = webdriver.Firefox(executable_path=driver_manager.install(), options=options)
+        driver = webdriver.Firefox(service=service(driver_manager.install()), options=options)
 
     return driver
 
