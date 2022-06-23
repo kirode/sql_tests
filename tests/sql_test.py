@@ -1,5 +1,6 @@
 from src.query_page import QueryPage
 from pytest_check import is_true
+from helpers import update_query, insert_query
 
 
 def test_customer_address(driver):
@@ -27,12 +28,8 @@ def test_create_customer(driver):
                 'PostalCode': '117418',
                 'Country': 'RF'}
     result = 'You have made changes to the database. Rows affected: 1'
-    columns = []
-    values = []
-    for key, value in customer.items():
-        columns.append(key)
-        values.append(value)
-    query = f'INSERT INTO Customers {tuple(columns)} values {tuple(values)};'
+    columns, values = insert_query(customer)
+    query = f'INSERT INTO Customers {columns} values {values};'
     page = QueryPage(driver).open()
     page.set_sql_statement(query)
     page.run_sql()
@@ -55,12 +52,7 @@ def test_update_customer(driver):
                 'Country': 'RF'}
     result = 'You have made changes to the database. Rows affected: 1'
     page = QueryPage(driver).open()
-    values = ''
-    for key, value in customer.items():
-        values += f'{key}=\'{value}\', '
-    index = values.rfind(',')
-    values = values[:index] + ' '
-    page.set_sql_statement(f'UPDATE Customers SET {values}WHERE CustomerID=\'1\'')
+    page.set_sql_statement(f'UPDATE Customers SET {update_query(customer)}WHERE CustomerID=\'1\'')
     page.run_sql()
     is_true(page.get_operation_result_text(result))
 
